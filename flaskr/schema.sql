@@ -5,7 +5,8 @@ DROP TABLE IF EXISTS worker;
 CREATE TABLE client (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT  NOT NULL,
-  oauth TEXT NOT NULL
+  oauth TEXT NOT NULL,
+  balance REAL NOT NULL
 );
 
 
@@ -21,12 +22,13 @@ CREATE TABLE gig (
   description TEXT NOT NULL,
   status INTEGER NOT NULL,
   location TEXT NOT NULL,
-  price INTEGER NOT NULL,
+  price REAL NOT NULL,
   FOREIGN KEY (cid) REFERENCES client (id),
   FOREIGN KEY (wid) REFERENCES worker (id)
 );
 
 CREATE TABLE worker (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT UNIQUE NOT NULL
+  name TEXT UNIQUE NOT NULL,
+  balance REAL NOT NULL
 );
