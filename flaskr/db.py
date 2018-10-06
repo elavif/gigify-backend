@@ -10,16 +10,33 @@ def get_db():
             current_app.config['DATABASE'],
             detect_types=sqlite3.PARSE_DECLTYPES
         )
-        g.db.row_factory = sqlite3.Row
+        g.db.row_factory = dict_factory
 
     return g.db
 
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
 
 def close_db(e=None):
     db = g.pop('db', None)
 
     if db is not None:
         db.close()
+
+def insert_into(table, **kwargs):
+	sql = 'INSERT INTO {} ({}) VALUES ({})'.format(
+		table,
+		','.join(kwargs.keys()),
+		','.join('?' for v in kwargs.values())
+		)
+	print(sql)
+	print (kwargs.values())
+	get_db().cursor().execute(sql, kwargs.values())
+	get_db().commit()
+
 
 def init_db():
     db = get_db()
