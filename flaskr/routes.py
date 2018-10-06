@@ -175,13 +175,77 @@ def register_routes(app):
 			}
 			return jsonify(response)
 
+	@app.route('/get_all_client_jobs', methods=('POST',))
+	def get_all_client_jobs():
+		try:
+			client_id = str(request.form['client_id'])
+			try:
+				status = str(request.form['status'])
+				cursor = db.get_db().cursor()
+				cursor.execute("SELECT * FROM gig WHERE cid=? and status=?", (client_id, status))
+			except KeyError:
+    			# no status do something else
+				cursor = db.get_db().cursor()
+    			cursor.execute("SELECT * FROM gig WHERE cid=?", (client_id,))
+			results = cursor.fetchall()
+			response = {
+				'success': True,
+				'gigs': results,
+			}
+
+			return jsonify(response)
+
+		except:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
 
 
 
+	@app.route('/get_all_worker_jobs', methods=('GET',))
+	def get_all_worker_jobs():
+		try:
+			client_id = str(request.form['worker_id'])
+			try:
+				status = str(request.form['status'])
+				cursor = db.get_db().cursor()
+				cursor.execute("SELECT * FROM gig WHERE wid=? and status=?", (worker_id, status))
+			except KeyError:
+    			# no status do something else
+				cursor = db.get_db().cursor()
+    			cursor.execute("SELECT * FROM gig WHERE wid=?", (worker_id,))
+			results = cursor.fetchall()
+			response = {
+				'success': True,
+				'gigs': results,
+			}
 
+			return jsonify(response)
 
+		except:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
 
-
+	@app.route('/worker_balance', methods=('POST',))
+	def get_worker_balance():
+		try:			
+			worker_id = str(request.form['worker_id'])
+			cursor = db.get_db().cursor()
+			cursor.execute("SELECT balance FROM worker WHERE id=?", (worker_id))
+			balance = cursor.fetchall()[0]
+			response = {
+				'success': True,
+				'balance': balance,
+			}
+			return jsonify(response)
+		except:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
 
 
 
