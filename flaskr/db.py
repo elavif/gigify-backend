@@ -3,6 +3,8 @@ import sqlite3
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
+import datetime
+import uuid
 
 def get_db():
     if 'db' not in g:
@@ -44,6 +46,47 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
+	now = datetime.datetime.now()
+	client_id = 3
+	title = "Track down apple store thiefs"
+	description = "$100 if you get those a@@holes"
+	location = "37.7899 122.3969"
+	price = 100.00
+
+
+	insert_into('gig',
+		gid= str(uuid.uuid4()),
+		cid=client_id,
+		title=title,
+		description=description,
+		location=location,
+		price=price,
+		timeout_ts=now,
+		status='Queued',
+		)
+
+	insert_into('gig',
+		gid= str(uuid.uuid4()),
+		cid=0,
+		title="blah blah",
+		description="scooters or something",
+		location=location,
+		price=price,
+		timeout_ts=now,
+		status='Queued',
+		)
+
+
+	insert_into('gig',
+		gid= str(uuid.uuid4()),
+		cid=1,
+		title="Pizza Delivery",
+		description="Get these hot pizzas to our customers!",
+		location=location,
+		price=price,
+		timeout_ts=now,
+		status='Queued',
+		)
 
 @click.command('init-db')
 @with_appcontext

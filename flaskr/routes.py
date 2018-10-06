@@ -1,7 +1,7 @@
 from flask import request, jsonify
 import uuid
 import datetime
-import db
+from . import db, payment
 
 def register_routes(app):
 	# Place all the endpoints here!
@@ -101,17 +101,16 @@ def register_routes(app):
 			gig_id = str(request.form['gig_id'])
 			cursor = db.get_db().cursor()
 			cursor.execute("UPDATE gig SET completed_ts=?, status='Complete' WHERE gid=?", (now, gig_id))
-			
-			# TODO update balances
-
 			db.get_db().commit()
+
+			payment.pay_completed_gig(gig_id)
 
 			response = {
 				'success': True
 			}
 			return jsonify(response)
 
-		except:
+		except ZeroDivisionError:
 			response = {
 				'success': False
 			}
@@ -234,18 +233,36 @@ def register_routes(app):
 		try:			
 			worker_id = str(request.form['worker_id'])
 			cursor = db.get_db().cursor()
-			cursor.execute("SELECT balance FROM worker WHERE id=?", (worker_id))
-			balance = cursor.fetchall()[0]
+			cursor.execute("SELECT balance, todaybal  FROM worker WHERE id=?", (worker_id))
+			result = cursor.fetchone()
 			response = {
 				'success': True,
-				'balance': balance,
+				'result': result
 			}
 			return jsonify(response)
-		except:
+		except ZeroDivisionError:
 			response = {
 				'success': False
 			}
 			return jsonify(response)
 
+
+	@app.route('/client_balance', methods=('POST',))
+	def get_client_balance():
+		try:			
+			client_id = str(request.form['client_id'])
+			cursor = db.get_db().cursor()
+			cursor.execute("SELECT balance FROM client WHERE id=?", (client_id))
+			result = cursor.fetchone()
+			response = {
+				'success': True,
+				'result': result
+			}
+			return jsonify(response)
+		except ZeroDivisionError:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
 
 
