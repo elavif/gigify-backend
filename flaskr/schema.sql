@@ -23,6 +23,7 @@ CREATE TABLE gig (
   status TEXT NOT NULL,
   location TEXT NOT NULL,
   price REAL NOT NULL,
+  details TEXT NOT NULL DEFAULT "",
   FOREIGN KEY (cid) REFERENCES client (id),
   FOREIGN KEY (wid) REFERENCES worker (id)
 );
