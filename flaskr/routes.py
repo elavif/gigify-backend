@@ -136,6 +136,25 @@ def register_routes(app):
 			}
 			return jsonify(response)
 
+	@app.route('/all_queued_gigs', methods=('GET',))
+	def get_all_queued_gigs():
+		try:
+			cursor = db.get_db().cursor()
+			cursor.execute("SELECT * FROM gig WHERE status='Queued'")
+			results = cursor.fetchall()
+			response = {
+				'success': True,
+				'gigs': results,
+			}
+
+			return jsonify(response)
+
+		except:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
+
 
 	@app.route('/all_clients', methods=('GET',))
 	def get_all_clients():
@@ -332,6 +351,9 @@ def register_routes(app):
 		return s3exp.comment_page()
 
 
+	@app.route('/commentbox')
+	def route_to_commentboxpage():
+		return s3exp.comment_box()
 	'''
 	# Merged with add_worker_picture, don't use.
 	@app.route('/image_upload', methods=('POST',))
