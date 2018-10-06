@@ -30,7 +30,8 @@ CREATE TABLE gig (
 CREATE TABLE worker (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT UNIQUE NOT NULL,
-  balance REAL NOT NULL
+  balance REAL NOT NULL,
+  todaybal REAL NOT NULL
 );
 
 INSERT INTO client VALUES 
@@ -40,6 +41,6 @@ INSERT INTO client VALUES
 (3, 'Apple', '2390uisfdsd90', 0.00);
 
 INSERT INTO worker VALUES
-(0, 'Burak Icel', 0.00),
-(1, 'Eilon Lavi', 1.00),
-(2, 'Aryan G', 3.14);
+(0, 'Burak Icel', 37.00, 0.00),
+(1, 'Eilon Lavi', 720.00, 0.00),
+(2, 'Aryan G', 3.14, 0.00);
