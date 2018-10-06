@@ -1,7 +1,8 @@
-from flask import request, jsonify
+from flask import request, jsonify, make_response
 import uuid
 import datetime
-from . import db, payment
+from . import db, payment, s3exp, gigdetails
+import os
 
 def register_routes(app):
 	# Place all the endpoints here!
@@ -265,4 +266,96 @@ def register_routes(app):
 			}
 			return jsonify(response)
 
+	@app.route('/add_worker_comment', methods=('POST',))
+	def add_worker_comment():
+		worker_id = str(request.form['worker_id'])
+		gig_id = str(request.form['gig_id'])
+		comment_text = str(request.form['comment_text'])
 
+		gigdetails.add_worker_comment(gig_id, worker_id, comment_text)
+
+		response = {
+			'success': True
+		}
+		return jsonify(response)
+
+	@app.route('/add_worker_picture_comment', methods=('POST',))
+	def add_worker_picture_comment():
+		worker_id = str(request.form['worker_id'])
+		gig_id = str(request.form['gig_id'])
+		file=request.files['image']
+		image_id = str(uuid.uuid4()) + '.'+ file.filename.split(".")[-1]
+		f = os.path.join(app.root_path, 'images', image_id)
+		file.save(f)
+
+		image_url = 'http://localhost:5000/images/' +image_id
+
+		gigdetails.add_worker_picture(gig_id, worker_id, image_url)
+
+		response = {
+				'success': True,
+				'image_url': image_url
+			}
+		return jsonify(response)
+
+
+
+	@app.route('/add_client_comment', methods=('POST',))
+	def add_client_comment():
+		client_id = str(request.form['client_id'])
+		gig_id = str(request.form['gig_id'])
+		comment_text = str(request.form['comment_text'])
+
+		gigdetails.add_client_comment(gig_id, client_id, comment_text)
+
+		response = {
+			'success': True
+		}
+		return jsonify(response)
+
+
+
+	@app.route('/images/<path:path>')
+	def images(path):
+		fullpath = os.path.join(app.root_path, 'images', path)
+		resp = make_response(open(fullpath).read())
+		resp.content_type = "image/jpeg"
+		return resp		
+
+
+	@app.route('/s3exp')
+	def route_to_s3module():
+		return s3exp.get_page()
+
+	@app.route('/commentexp')
+	def route_to_commentexppage():
+		return s3exp.comment_page()
+
+
+	'''
+	# Merged with add_worker_picture, don't use.
+	@app.route('/image_upload', methods=('POST',))
+	def image_upload():
+		file=request.files['image']
+		image_id = str(uuid.uuid4())
+		f = os.path.join(app.root_path, 'images', image_id)
+		file.save(f)
+		response = {
+				'success': True,
+				'image_id': image_id
+			}
+		return jsonify(response)
+	'''
+
+	'''@app.route('/add_worker_picture', methods=('POST',))
+	def add_worker_picture():
+		worker_id = str(request.form['worker_id'])
+		gig_id = str(request.form['gig_id'])
+		img_url = str(request.form['img_url'])
+
+		gigdetails.add_worker_picture(gig_id, worker_id, img_url)
+
+		response = {
+			'success': True
+		}
+		return jsonify(response)'''
