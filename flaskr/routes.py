@@ -34,7 +34,7 @@ def register_routes(app):
 				location=location,
 				price=price,
 				timeout_ts=now,
-				status='QUEUED',
+				status='Queued',
 				)
 
 			response = {
@@ -67,13 +67,74 @@ def register_routes(app):
 
 			return jsonify(response)
 
-		except(ZeroDivisionError):
+		except:
 			response = {
 				'success': False
 			}
 			return jsonify(response)
 
+	@app.route('/all_gigs', methods=('GET',))
+	def get_all_gigs():
+		try:
+			cursor = db.get_db().cursor()
+			cursor.execute("SELECT * FROM gig")
+			results = cursor.fetchall()
+			response = {
+				'success': True,
+				'gigs': results,
+			}
 
+			return jsonify(response)
+
+		except:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
+
+	@app.route('/accept_gig', methods=('POST',))
+	def accept_gig():
+		try:
+			now = datetime.datetime.now()
+			gig_id = str(request.form['gig_id'])
+			worker_id = str(request.form['worker_id'])
+			cursor = db.get_db().cursor()
+			cursor.execute("UPDATE gig SET wid=?, accepted_ts=?, status='In Progress' WHERE gid=?", (worker_id, now, gig_id))
+			db.get_db().commit()
+
+			response = {
+				'success': True
+			}
+			return jsonify(response)
+
+		except:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
+
+	@app.route('/complete_gig', methods=('POST',))
+	def complete_gig():
+		try:
+			now = datetime.datetime.now()
+			gig_id = str(request.form['gig_id'])
+			cursor = db.get_db().cursor()
+			cursor.execute("UPDATE gig SET completed_ts=?, status='Complete' WHERE gid=?", (now, gig_id))
+			
+			# TODO update balances
+
+			db.get_db().commit()
+
+			response = {
+				'success': True
+			}
+			return jsonify(response)
+
+		except:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
 
 
 
