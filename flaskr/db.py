@@ -48,10 +48,10 @@ def init_db():
 
 	now = datetime.datetime.now()
 	client_id = 3
-	title = "Track down apple store thiefs"
-	description = "$100 if you get those a@@holes"
+	title = "Get the scooter on 7th avenue and move to 9th avenue"
+	description = "$5 to move it please"
 	location = "37.7899 122.3969"
-	price = 100.00
+	price = 5.00
 
 
 	insert_into('gig',
@@ -68,10 +68,10 @@ def init_db():
 	insert_into('gig',
 		gid= str(uuid.uuid4()),
 		cid=0,
-		title="blah blah",
-		description="scooters or something",
-		location=location,
-		price=price,
+		title="Mow my lawn",
+		description="please, I am going out of town and my lawn as become a huge disaster",
+		location="38.7899 123.3969",
+		price=30.00,
 		timeout_ts=now,
 		status='Queued',
 		)
@@ -88,6 +88,40 @@ def init_db():
 		status='Queued',
 		)
 
+	insert_into('gig',
+		gid= str(uuid.uuid4()),
+		cid=1,
+		title="Clean the kitchen",
+		description="Need someone to clean my kitchen! Willing to pay extra. ",
+		location=location,
+		price=price,
+		timeout_ts=now,
+		status='Queued',
+		)
+
+
+	insert_into('gig',
+		gid= str(uuid.uuid4()),
+		cid=1,
+		title="Need someone to shovel",
+		description="Hurt my back recently and would love someones help",
+		location=location,
+		price=price,
+		timeout_ts=now,
+		status='Queued',
+		)
+
+
+	insert_into('gig',
+		gid= str(uuid.uuid4()),
+		cid=1,
+		title="Come to the office and assemble 50 tables",
+		description="Come alone or birng a friend",
+		location=location,
+		price=150.00,
+		timeout_ts=now,
+		status='Queued',
+		)
 @click.command('init-db')
 @with_appcontext
 def init_db_command():
