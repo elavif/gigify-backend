@@ -79,7 +79,7 @@ def init_db():
 
 	insert_into('gig',
 		gid= str(uuid.uuid4()),
-		cid=1,
+		cid=0,
 		title="Pizza Delivery",
 		description="Get these hot pizzas to our customers!",
 		location=location,
@@ -90,7 +90,7 @@ def init_db():
 
 	insert_into('gig',
 		gid= str(uuid.uuid4()),
-		cid=1,
+		cid=0,
 		title="Clean the kitchen",
 		description="Need someone to clean my kitchen! Willing to pay extra. ",
 		location=location,
@@ -102,7 +102,7 @@ def init_db():
 
 	insert_into('gig',
 		gid= str(uuid.uuid4()),
-		cid=1,
+		cid=0,
 		title="Need someone to shovel",
 		description="Hurt my back recently and would love someones help",
 		location=location,
