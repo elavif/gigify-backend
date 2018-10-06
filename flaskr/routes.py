@@ -73,25 +73,6 @@ def register_routes(app):
 			}
 			return jsonify(response)
 
-	@app.route('/all_gigs', methods=('GET',))
-	def get_all_gigs():
-		try:
-			cursor = db.get_db().cursor()
-			cursor.execute("SELECT * FROM gig")
-			results = cursor.fetchall()
-			response = {
-				'success': True,
-				'gigs': results,
-			}
-
-			return jsonify(response)
-
-		except:
-			response = {
-				'success': False
-			}
-			return jsonify(response)
-
 	@app.route('/accept_gig', methods=('POST',))
 	def accept_gig():
 		try:
@@ -135,6 +116,65 @@ def register_routes(app):
 				'success': False
 			}
 			return jsonify(response)
+
+	@app.route('/all_gigs', methods=('GET',))
+	def get_all_gigs():
+		try:
+			cursor = db.get_db().cursor()
+			cursor.execute("SELECT * FROM gig")
+			results = cursor.fetchall()
+			response = {
+				'success': True,
+				'gigs': results,
+			}
+
+			return jsonify(response)
+
+		except:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
+
+
+	@app.route('/all_clients', methods=('GET',))
+	def get_all_clients():
+		try:
+			cursor = db.get_db().cursor()
+			cursor.execute("SELECT * FROM client")
+			results = cursor.fetchall()
+			response = {
+				'success': True,
+				'clients': results,
+			}
+
+			return jsonify(response)
+
+		except:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
+
+	@app.route('/all_workers', methods=('GET',))
+	def get_all_workers():
+		try:
+			cursor = db.get_db().cursor()
+			cursor.execute("SELECT * FROM worker")
+			results = cursor.fetchall()
+			response = {
+				'success': True,
+				'workers': results,
+			}
+
+			return jsonify(response)
+
+		except:
+			response = {
+				'success': False
+			}
+			return jsonify(response)
+
 
 
 

@@ -32,3 +32,14 @@ CREATE TABLE worker (
   name TEXT UNIQUE NOT NULL,
   balance REAL NOT NULL
 );
+
+INSERT INTO client VALUES 
+(0, 'Bird', '823jidfs9023rj', 50.34),
+(1, 'Pizza Hut', '132434sdfi', 20.15),
+(2, 'ACME Corp', '8392idfdsf90', 0.00),
+(3, 'Apple', '2390uisfdsd90', 0.00);
+
+INSERT INTO worker VALUES
+(0, 'Burak Icel', 0.00),
+(1, 'Eilon Lavi', 1.00),
+(2, 'Aryan G', 3.14);
